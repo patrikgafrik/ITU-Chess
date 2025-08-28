@@ -14,9 +14,9 @@ export default function MenuScreen({ navigation }) {
 
 
     const imageSources = {
-        'image1.png': require('../assets/ituga.png'),
-        'image2.png': require('../assets/bat.png'),
-        'image3.png': require('../assets/chad.png'),
+        'image1.png': require('../assets/goldfish.png'),
+        'image2.png': require('../assets/coolfish.png'),
+        'image3.png': require('../assets/evilfish.png'),
     };
 
     const [selectedImage, setSelectedImage] = useState('image1.png');
@@ -38,11 +38,21 @@ export default function MenuScreen({ navigation }) {
 
     const getOpponentName = () => {
         if (selectedImage === 'image1.png') {
-            return 'Ituga';
+            return 'A sleepy goldfish';
         } else if (selectedImage === 'image2.png') {
-            return 'Bat';
+            return 'Sunglasses Coolfish';
         } else if (selectedImage === 'image3.png') {
-            return 'Chad';
+            return 'Evil overlord fish';
+        }
+    }
+
+    const getOpponentDescription = () => {
+        if (selectedImage === 'image1.png') {
+            return 'Stockfish’s tiny cousin who forgets how the knight moves.';
+        } else if (selectedImage === 'image2.png') {
+            return 'thinks he’s a pro, medium skills.';
+        } else if (selectedImage === 'image3.png') {
+            return 'glowing eyes, crowned, intimidating.';
         }
     }
 
@@ -78,7 +88,7 @@ export default function MenuScreen({ navigation }) {
         >
             {
                 isButtonVisible && (
-                    <Image style={{position: 'absolute', top: 140,  width: 150, height: 200}} source={require('../assets/chess.png')}></Image>
+                    <Image style={{position: 'relative', top: 140,  width: 260, height: 200, marginRight: 20}} source={require('../assets/chess.png')}></Image>
                 )
             }
 
@@ -120,14 +130,15 @@ export default function MenuScreen({ navigation }) {
                                     style={styles.image}
                                 />
                             </View>
-                            <View>
+                            <View style={{display: 'flex', alignItems: 'center'}}>
                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20}}>{getOpponentName()}</Text>
+                                <Text style={{color: 'white', marginTop: 30 }}>{getOpponentDescription()}</Text>
                                 <Text style={styles.difficultyText}>Difficulty: {getDifficulty()}</Text>
                             </View>
 
                         </View>
 
-                        <View style={{position : 'absolute', top: 450, backgroundColor: 'grey', padding: 10, borderRadius: 10}}>
+                        <View style={{position : 'absolute', top: 450, backgroundColor: 'grey', padding: 10, borderRadius: 10, marginTop: 50}}>
                             <Text style={{color: 'white'}}>Stockfish is</Text>
                             <Switch
                                 value={isSwitchOn}
@@ -155,14 +166,14 @@ export default function MenuScreen({ navigation }) {
                         </View>
 
                         <TouchableOpacity style={{
-                            position: 'absolute', bottom: 150,
+                            position: 'absolute', bottom: 80,
                             backgroundColor: '#81b64c', padding: 10, borderRadius: 5,
                             shadowColor: 'rgba(0, 0, 0, 0.3)',
                             shadowOpacity: 0.8,
                             elevation: 6,
                             shadowRadius: 25,
                             shadowOffset: {width: 1, height: 13},
-                            margin: 10
+                            margin: 10,
                         }} onPress={play}>
                             <Text style={{fontWeight: 'bold', fontSize: 20, color: 'white'}}>Play</Text>
                         </TouchableOpacity>
@@ -200,6 +211,7 @@ const styles = StyleSheet.create({
         marginBottom: 150,
     },
     imageContainer: {
+        marginTop: 50,
         marginBottom: 20,
     },
     image: {
@@ -210,7 +222,7 @@ const styles = StyleSheet.create({
     },
     difficultyText: {
         color: 'white',
-        marginTop: 10,
+        marginTop: 30,
     },
 
     button: {

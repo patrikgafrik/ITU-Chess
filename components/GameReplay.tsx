@@ -31,6 +31,7 @@ const GameReplay = ({ navigation }) => {
     }, []);
 
     const handleNextMove = () => {
+        console.log(history);
         // inkrementuje index tahu a aktualizuje sachovnicu
         if (currentMove < history[history.length - 1].moveList.length) {
             console.log(history[history.length - 1].moveList[currentMove].san);
@@ -67,7 +68,7 @@ const GameReplay = ({ navigation }) => {
     function getStockfishEvaluation(fenPosition) {
 
         // stockfish url s parametrom mode=eval pre ziskanie vyhodnotenia pozicie
-        const stockfishUrl = `https://stockfish.online/api/stockfish.php?fen=${encodeURIComponent(fenPosition)}&depth=5&mode=eval`;
+        const stockfishUrl = `http://34.140.235.92:5000/stockfish/bestmove?fen=${encodeURIComponent(fenPosition)}&depth=5`;
 
         fetch(stockfishUrl)
             .then(response => {
@@ -80,7 +81,7 @@ const GameReplay = ({ navigation }) => {
             })
             .then(data => {
 
-                const evaluatedMove = data.data;
+                const evaluatedMove = data.evaluation;
                 setEvaluation(evaluatedMove);
                 console.log("Stockfish analysis:", data);
             })
@@ -113,7 +114,7 @@ const GameReplay = ({ navigation }) => {
             colors={['#3F3F3F', '#282828', '#1F1F1F']}
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
         >
-            <View style={{ paddingTop: 40, flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
+            <View style={{ paddingTop: 60, flex: 1, justifyContent: 'flex-start', alignItems: 'center' }}>
                 {currentMove >= 1 && <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>Move: {currentMove}</Text>}
                 {evaluation && <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>{evaluation}</Text>}
             </View>
@@ -129,6 +130,7 @@ const GameReplay = ({ navigation }) => {
                     keyExtractor={(item, index) => index.toString()}
                     onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
                     onLayout={() => flatListRef.current.scrollToEnd({ animated: true })}
+                    showsVerticalScrollIndicator={false}
                     style={{marginTop: 10,  width: '100%' }}
                 />
 

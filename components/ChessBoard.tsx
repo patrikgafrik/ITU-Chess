@@ -31,9 +31,9 @@ const ChessBoard = ( { route, navigation }) => {
     const { stockfishEnabled } = route.params;
 
     const imageSources = {
-        'image1.png': require('../assets/ituga.png'),
-        'image2.png': require('../assets/bat.png'),
-        'image3.png': require('../assets/chad.png'),
+        'image1.png': require('../assets/goldfish.png'),
+        'image2.png': require('../assets/coolfish.png'),
+        'image3.png': require('../assets/evilfish.png'),
     };
 
     const getStockfishDepth = () => {
@@ -69,6 +69,7 @@ const ChessBoard = ( { route, navigation }) => {
         setMoveCount(moveCount + 1);
         const moveHistory = state.history;
         setFenList([...fenList, currentState]);
+        console.log(moveHistory);
 
         // white to move
         if (!pieceMoved) {
@@ -78,6 +79,7 @@ const ChessBoard = ( { route, navigation }) => {
             }
 
             if (inCheckMate) {
+                console.log(moveHistory);
                 setGameOverMessage('White Won by Checkmate!');
                 setGameOver(true);
                 storeGameResult({
@@ -131,7 +133,7 @@ const ChessBoard = ( { route, navigation }) => {
 
         console.log(fenPosition);
         // stockfish API URL s nastavenim pozadovanych parametrov
-        const stockfishUrl = `https://stockfish.online/api/stockfish.php?fen=${encodeURIComponent(fenPosition)}&depth=${getStockfishDepth()}&mode=bestmove`;
+        const stockfishUrl = `http://34.140.235.92:5000/stockfish/bestmove?fen=${encodeURIComponent(fenPosition)}&depth=${getStockfishDepth()}`;
 
         fetch(stockfishUrl)
             .then(response => {
@@ -144,7 +146,7 @@ const ChessBoard = ( { route, navigation }) => {
             })
             .then(data => {
 
-                const movesString = data.data.split(' ')[1];
+                const movesString = data.bestmove.split(' ')[1];
                 const [fromSquare, toSquare] = [movesString.slice(0, 2), movesString.slice(2, 4)];
                 const movesArray = [fromSquare, toSquare];
                 setMoveNext(movesArray);
