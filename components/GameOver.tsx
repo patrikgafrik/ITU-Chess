@@ -35,12 +35,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: 'rgba(124, 182, 130, 1)',
         padding: 20,
         borderRadius: 10,
         elevation: 5,
+        width: '80%',
     },
     message: {
+        color: '#ffffffff',
         fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',

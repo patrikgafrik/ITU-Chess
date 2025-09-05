@@ -18,6 +18,7 @@ const ChessBoard = ( { route, navigation }) => {
     const [gameOver, setGameOver] = useState(false);
     const [rematch, setRematch] = useState(false);
     const [fenList, setFenList] = useState([]);
+    const [moveHistory, setMoveHistory] = useState([]);
     const currentDate = new Date();
 
     const day = currentDate.getDate();
@@ -67,7 +68,7 @@ const ChessBoard = ( { route, navigation }) => {
         const currentState = chessboardRef.current?.getState().fen;
         const inCheckMate = chessboardRef.current?.getState().in_checkmate;
         setMoveCount(moveCount + 1);
-        const moveHistory = state.history;
+        setMoveHistory(state.history);
         setFenList([...fenList, currentState]);
         console.log(moveHistory);
 
@@ -123,6 +124,19 @@ const ChessBoard = ( { route, navigation }) => {
         navigation.navigate('MenuScreen');
     }
 
+    const handleTimeLoss = () => {
+        setGameOverMessage('You lost on time!');
+        setGameOver(true);
+        storeGameResult({
+            result: 'loss',
+            player: imageSources[selectedImage],
+            moves: moveCount,
+            date: formattedDate,
+            moveList: moveHistory,
+            fenList: fenList
+        });
+
+    }
     const [white_currently_playing, swap_player ] = useState(true);
 
     const isMountingRef = useRef(false);
@@ -208,8 +222,7 @@ const ChessBoard = ( { route, navigation }) => {
 
             <View style={{flex: 1, alignItems: 'center', position: 'absolute', bottom: 100, right: 150,}}>
                 <Icon name="clock-o" size={45} color="white" />
-                <Clock moveDetected={white_currently_playing} storeGameResult={storeGameResult} player={imageSources[selectedImage]}
-                moves={moveCount} date={formattedDate} clockReset={rematch}/>
+                <Clock moveDetected={white_currently_playing} clockReset={rematch} onTimeLoss={handleTimeLoss}/>
             </View>
             <View style={{flex: 1, alignItems: 'center', position: 'absolute', bottom: 40, right: 140,}}>
                 <TouchableOpacity style={{backgroundColor: '#eb4034', padding: 10, borderRadius: 10}}  onPress={handleAbort}>

@@ -1,8 +1,9 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { View, Text, Button } from 'react-native';
 
-const Clock = ({ moveDetected, storeGameResult, player, moves, date, clockReset }) => {
-    const [seconds, setSeconds] = useState(180);
+
+const Clock = ({ moveDetected, clockReset, onTimeLoss }) => {
+    const [seconds, setSeconds] = useState(5);
     const [isActive, setIsActive] = useState(moveDetected);
     const isMountingRef = useRef(false);
 
@@ -15,13 +16,6 @@ const Clock = ({ moveDetected, storeGameResult, player, moves, date, clockReset 
                 setSeconds(prevSeconds => {
                     if (prevSeconds <= 0) {
                         clearInterval(interval);
-                        alert('You lost on time!');
-                        storeGameResult({
-                            result: 'loss',
-                            player: player,
-                            moves: moves,
-                            date: date,
-                        })
                         setIsActive(false);
                         return 0;
                     } else {
@@ -36,9 +30,17 @@ const Clock = ({ moveDetected, storeGameResult, player, moves, date, clockReset 
 
     }, [isActive]);
 
+    // React to time reaching 0: perform side effects here.
+    useEffect(() => {
+        if (seconds === 0 && isActive) {
+            setIsActive(false);       // stop the clock
+            onTimeLoss?.();           // notify parent (ChessBoard)
+        }
+    }, [seconds, isActive, onTimeLoss]);
+
     useEffect(() => {
 
-        setSeconds(180);
+        setSeconds(10);
         setIsActive(true);
 
     }, [clockReset]);
